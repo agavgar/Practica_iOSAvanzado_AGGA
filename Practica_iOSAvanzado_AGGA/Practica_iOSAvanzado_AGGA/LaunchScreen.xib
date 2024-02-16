@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="32x-BQ-MCv">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BG" translatesAutoresizingMaskIntoConstraints="NO" id="HK3-qo-fjz">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                </imageView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="9K6-w0-4fP"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="HK3-qo-fjz" firstAttribute="leading" secondItem="9K6-w0-4fP" secondAttribute="leading" id="7Bx-NA-cQL"/>
+                <constraint firstItem="9K6-w0-4fP" firstAttribute="trailing" secondItem="HK3-qo-fjz" secondAttribute="trailing" id="IoD-Ej-cuM"/>
+                <constraint firstItem="HK3-qo-fjz" firstAttribute="top" secondItem="32x-BQ-MCv" secondAttribute="top" id="nnO-hv-Lhl"/>
+                <constraint firstAttribute="bottom" secondItem="HK3-qo-fjz" secondAttribute="bottom" id="vmA-VH-hor"/>
+            </constraints>
+            <point key="canvasLocation" x="253" y="-124"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="BG" width="720" height="1280"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

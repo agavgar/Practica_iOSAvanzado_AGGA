@@ -2,7 +2,7 @@
 //  DetailViewController.swift
 //  Practica_IOSAvanzado_AGGA
 //
-//  Created by Alejandro Alberto Gavira García on 15/2/24.
+//  Created by Alejandro Alberto Gavira García on 16/2/24.
 //
 
 import UIKit

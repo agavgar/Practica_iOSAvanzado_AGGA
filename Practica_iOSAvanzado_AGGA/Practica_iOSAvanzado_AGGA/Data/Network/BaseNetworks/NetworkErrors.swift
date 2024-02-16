@@ -13,5 +13,3 @@ enum NetworkErrors: Error {
     case tokenNotFound
     case unknown
 }
-
-extension NetworkErrors: Equatable{}

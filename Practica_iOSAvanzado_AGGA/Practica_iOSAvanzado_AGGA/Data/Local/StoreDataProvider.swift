@@ -42,7 +42,7 @@ extension StoreDataProvider {
                 newHeroe.info = heroe.description
                 newHeroe.name = heroe.name
                 newHeroe.photo = heroe.photo
-                newHeroe.favorite = heroe.favorite
+                newHeroe.favorite = heroe.favorite ?? false
             }
             self.save()
         }
@@ -91,12 +91,22 @@ extension StoreDataProvider {
                 let newLocalization = NSMLocation(context: context)
                 newLocalization.id = places.id
                 newLocalization.date = places.date
-                newLocalization.latitude = places.latitude
-                newLocalization.longitude = places.longitude
+                newLocalization.latitude = places.latitude ?? 0
+                newLocalization.longitude = places.longitude ?? 0
                 let filter = NSPredicate(format: "id == $@", places.hero?.id ?? "")
                 newLocalization.heroe = self.fetchHeroes(filter: filter).first
             }
             self.save()
+        }
+    }
+    
+    func fetchLocalization() -> [NSMLocation] {
+        let request = NSMLocation.fetchRequest()
+        do {
+            return try context.fetch(request)
+        }catch {
+            print("Fetch transform fail")
+            return []
         }
     }
     

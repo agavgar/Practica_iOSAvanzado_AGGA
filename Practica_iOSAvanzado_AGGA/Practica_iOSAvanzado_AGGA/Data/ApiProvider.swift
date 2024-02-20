@@ -8,26 +8,10 @@
 import Foundation
 
 protocol ApiProviderProtocol {
-    
-    func getTransform(idHeroe: String, completion: @escaping (Result<[DBTransformations], NetworkErrors>)-> Void)
-    func getLocalization(idHeroe: String, completion: @escaping (Result<[DBLocalization], NetworkErrors>)-> Void)
     func getData<T:Decodable>(endpoint: String, dataRequest: String, value: String, completion: @escaping (Result<T, NetworkErrors>)-> Void)
 }
 
 final class ApiProvider: ApiProviderProtocol {
-    
-    func getHeroes(completion: @escaping (Result<[DBHeroes], NetworkErrors>) -> Void) {
-        getData(endpoint: EndPoints.heroes.rawValue, dataRequest: "name", value: "", completion: completion)
-    }
-    
-    func getTransform(idHeroe: String, completion: @escaping (Result<[DBTransformations], NetworkErrors>) -> Void) {
-        getData(endpoint: EndPoints.transform.rawValue, dataRequest: "id", value: idHeroe, completion: completion)
-    }
-    
-    func getLocalization(idHeroe: String, completion: @escaping (Result<[DBLocalization], NetworkErrors>) -> Void) {
-        getData(endpoint: EndPoints.localization.rawValue, dataRequest: "id", value: idHeroe, completion: completion)
-    }
-    
     
     func getData<T: Decodable>(endpoint:String, dataRequest: String, value: String , completion: @escaping (Result<T, NetworkErrors>) -> Void) {
         

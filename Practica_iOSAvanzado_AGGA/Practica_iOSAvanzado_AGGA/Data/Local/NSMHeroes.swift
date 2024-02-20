@@ -15,13 +15,30 @@ class NSMHeroes: NSManagedObject, Identifiable {
         return NSFetchRequest<NSMHeroes>(entityName: "Heroes")
     }
 
-    public var id: String?
-    public var name: String?
-    public var info: String?
-    public var photo: String?
-    public var favorite:Bool?
-    
-    public var transformations: Set<NSMTransforms>?
-    public var location: NSMLocation?
+    @NSManaged public var favorite: Bool
+    @NSManaged public var id: String?
+    @NSManaged public var info: String?
+    @NSManaged public var name: String?
+    @NSManaged public var photo: String?
+    @NSManaged public var location: NSMLocation?
+    @NSManaged public var transformations: Set<NSMTransforms>?
 
 }
+
+// MARK: Generated accessors for transformations
+extension NSMHeroes {
+
+    @objc(addTransformationsObject:)
+    @NSManaged public func addToTransformations(_ value: NSMTransforms)
+
+    @objc(removeTransformationsObject:)
+    @NSManaged public func removeFromTransformations(_ value: NSMTransforms)
+
+    @objc(addTransformations:)
+    @NSManaged public func addToTransformations(_ values: Set<NSMTransforms>)
+
+    @objc(removeTransformations:)
+    @NSManaged public func removeFromTransformations(_ values: Set<NSMTransforms>)
+
+}
+

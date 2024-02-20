@@ -15,11 +15,11 @@ class NSMTransforms: NSManagedObject, Identifiable {
         return NSFetchRequest<NSMTransforms>(entityName: "Transforms")
     }
 
-    public var id: String?
-    public var name: String?
-    public var info: String?
-    public var photo: String?
-    public var heroe: NSMHeroes?
+    @NSManaged public var id: String?
+    @NSManaged public var info: String?
+    @NSManaged public var name: String?
+    @NSManaged public var photo: String?
+    @NSManaged public var heroe: NSMHeroes?
 
     
 }

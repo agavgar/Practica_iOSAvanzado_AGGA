@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol GenericUseCaseProtocol {
-    func getHeroes(completion: @escaping (Result<[DBHeroes], NetworkErrors>)-> Void)
+protocol ApiProviderProtocol {
+    
     func getTransform(idHeroe: String, completion: @escaping (Result<[DBTransformations], NetworkErrors>)-> Void)
     func getLocalization(idHeroe: String, completion: @escaping (Result<[DBLocalization], NetworkErrors>)-> Void)
     func getData<T:Decodable>(endpoint: String, dataRequest: String, value: String, completion: @escaping (Result<T, NetworkErrors>)-> Void)
 }
 
-final class GenericUseCase: GenericUseCaseProtocol {
+final class ApiProvider: ApiProviderProtocol {
     
     func getHeroes(completion: @escaping (Result<[DBHeroes], NetworkErrors>) -> Void) {
         getData(endpoint: EndPoints.heroes.rawValue, dataRequest: "name", value: "", completion: completion)

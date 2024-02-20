@@ -13,3 +13,10 @@ enum NetworkErrors: Error {
     case tokenNotFound
     case unknown
 }
+
+enum CoreDataErrors {
+    case errorFetch
+    case errorAssign
+    case errorAdd
+    case errorDel
+}

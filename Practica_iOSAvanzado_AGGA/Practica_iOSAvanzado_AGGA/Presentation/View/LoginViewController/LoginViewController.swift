@@ -9,8 +9,17 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+    //MARK: - IBOutlets
+    
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var passTextField: UITextField!
+    @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var passwordLabel: UILabel!
+    
+    //MARK: - Models
     private var viewModel: LoginViewModel
     
+    //MARK: - Init
     init(viewModel: LoginViewModel = LoginViewModel()) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -20,21 +29,43 @@ class LoginViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
     }
 
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    //MARK: - IBActions
+    @IBAction func loginButton(_ sender: UIButton) {
+        navigateHeroes()
     }
-    */
-
+    
+    func navigateHeroes() {
+        if !viewModel.onLoginButton(email: emailTextField.text, password: passTextField.text) {
+            usernameLabel.text = "User or password is wrong"
+            passwordLabel.text = "User or password is wrong"
+            usernameLabel.textColor = .red
+            passwordLabel.textColor = .red
+        }else{
+            navigateVC()
+        }
+    }
+    
+    func navigateVC(){
+        DispatchQueue.main.async {
+            let nextVM = HeroesViewModel()
+            let nextVC = HeroesViewController(viewModel: nextVM)
+            self.navigationController?.setViewControllers([nextVC], animated: true)
+        }
+    }
+    
+    func updateUI(){
+     
+        DispatchQueue.main.async {
+            
+        }
+        
+        
+    }
+    
 }

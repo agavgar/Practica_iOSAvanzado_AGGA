@@ -7,11 +7,74 @@
 
 import Foundation
 
-protocol ApiProviderProtocol {
-    func getData<T:Decodable>(endpoint: String, dataRequest: String, value: String, completion: @escaping (Result<T, NetworkErrors>)-> Void)
-}
-
-final class ApiProvider: ApiProviderProtocol {
+final class ApiProvider {
+    
+    private var secureData: SecureDataProtocol
+    
+    init(secureData: SecureDataProtocol = SecureData()) {
+        self.secureData = secureData
+    }
+    
+    func login(user: String, pass: String, completion: @escaping (Result<String, NetworkErrors>) -> Void) {
+        guard let url = URL(string: "\(EndPoints.url.rawValue)\(EndPoints.login.rawValue)") else {
+            completion(.failure(.malformedURL))
+            return
+        }
+        
+        let loginString = String(format: "%@:%@", user, pass)
+        guard let loginData = loginString.data(using: .utf8) else {
+            completion(.failure(.failDecodingData))
+            return
+        }
+        
+        let base64LoginString = loginData.base64EncodedString()
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethods.post
+        request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: HTTPMethods.auth)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        
+            guard error == nil else {
+                completion(.failure(.unknown))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(.noData))
+                return
+            }
+            
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            guard statusCode == HTTPResponseCodes.SUCCESS else {
+                completion(.failure(.statusCode(code: statusCode)))
+                return
+            }
+            
+            guard let token = String(data: data, encoding: .utf8) else {
+                completion(.failure(.tokenNotFound))
+                return
+            }
+            
+            //Aqui guardamos en keychain
+            self.secureData.setToken(token: token)
+            completion(.success(token))
+    
+        }
+        task.resume()
+    }
+    
+    func getHeroes(completion: @escaping (Result<[DBHeroes], NetworkErrors>) -> Void) {
+        getData(endpoint: EndPoints.heroes.rawValue, dataRequest: "name", value: "", completion: completion)
+    }
+    
+    func getTransform(idHeroe: String, completion: @escaping (Result<[DBTransformations], NetworkErrors>)-> Void){
+        getData(endpoint: EndPoints.transform.rawValue, dataRequest: "id", value: idHeroe, completion: completion)
+    }
+    
+    func getLocalization(idHeroe: String, completion: @escaping (Result<[DBLocalization], NetworkErrors>)-> Void){
+        getData(endpoint: EndPoints.localization.rawValue, dataRequest: "id", value: idHeroe, completion: completion)
+    }
     
     func getData<T: Decodable>(endpoint:String, dataRequest: String, value: String , completion: @escaping (Result<T, NetworkErrors>) -> Void) {
         
@@ -22,7 +85,10 @@ final class ApiProvider: ApiProviderProtocol {
         }
         
         //2. Token
-        let token = "eyJraWQiOiJwcml2YXRlIiwiYWxnIjoiSFMyNTYiLCJ0eXAiOiJKV1QifQ.eyJpZGVudGlmeSI6IjFBNDI0NDZFLUI5M0MtNEI3RS04MzQxLTBEQTVCOERCQjdDMiIsImVtYWlsIjoiYWxleC5nYXZpcmFAZ21haWwuY29tIiwiZXhwaXJhdGlvbiI6NjQwOTIyMTEyMDB9.ZHqui-H7UdhB7hF6Q8ecb8iellXjsI-UW359w3lZ158"
+        guard let token = secureData.getToken() else {
+            debugPrint("Error with the token, Auth required")
+            return
+        }
         
         //3.Query
         var urlComponents = URLComponents()
@@ -47,6 +113,8 @@ final class ApiProvider: ApiProviderProtocol {
                 return
             }
             
+            debugPrint("\(data)")
+            
             let statusCode = (response as? HTTPURLResponse)?.statusCode
             
             guard statusCode == HTTPResponseCodes.SUCCESS else {
@@ -66,9 +134,5 @@ final class ApiProvider: ApiProviderProtocol {
         
     }
     
+    
 }
-
-//MARK: - Fake Success
-
-
-//MARK: - Fake Error

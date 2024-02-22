@@ -8,7 +8,21 @@
 import Foundation
 import CoreData
 
+enum StoreType {
+    case disk
+    case inMemory
+}
+
 final class StoreDataProvider {
+    
+    static var managedObjectModel: NSManagedObjectModel = {
+        let bundle = Bundle(for: StoreDataProvider.self)
+        guard  let url = bundle.url(forResource: "Model", withExtension: "momd"),
+               let mom = NSManagedObjectModel(contentsOf: url) else {
+            fatalError(" Error loading model file")
+        }
+        return mom
+    }()
     
     let persistentContainer: NSPersistentContainer
     lazy var context: NSManagedObjectContext = {
@@ -17,15 +31,20 @@ final class StoreDataProvider {
         return viewContext
     }()
     
-    init() {
-        persistentContainer = NSPersistentContainer(name: "Model")
-        
-        if let store = self.persistentContainer.persistentStoreDescriptions.first {
-            print("Store added")
+    init(storeType: StoreType = .disk) {
+        self.persistentContainer = NSPersistentContainer(name: "Model", managedObjectModel: Self.managedObjectModel)
+        if  storeType == .inMemory {
+            // Para persistir en memoria la BBDD debemos asignar la URL /dev/null al store Description
+            // Para testing es necesario que la base de datos esté en memoria
+            if let store = self.persistentContainer.persistentStoreDescriptions.first {
+                store.url = URL(filePath: "dev/null")
+            } else {
+                fatalError(" Error loading persistent Store Description")
+            }
         }
-        persistentContainer.loadPersistentStores { _, error in
+        self.persistentContainer.loadPersistentStores { _, error in
             if let error {
-                fatalError("Error creating Database \(error)")
+                fatalError("Error creating BBDD \(error)")
             }
         }
     }
@@ -75,7 +94,7 @@ extension StoreDataProvider {
         }
     }
     
-    func fetchTransform() -> [NSMTransforms] {
+    func fetchTransform(sorting: [NSSortDescriptor]? = nil) -> [NSMTransforms] {
         let request = NSMTransforms.fetchRequest()
         do {
             return try context.fetch(request)
@@ -91,10 +110,10 @@ extension StoreDataProvider {
                 let newLocalization = NSMLocation(context: context)
                 newLocalization.id = places.id
                 newLocalization.date = places.date
-                newLocalization.latitude = places.latitude ?? 0
-                newLocalization.longitude = places.longitude ?? 0
+                newLocalization.latitude = places.latitude ?? "0"
+                newLocalization.longitude = places.longitude ?? "0"
                 let filter = NSPredicate(format: "id == $@", places.hero?.id ?? "")
-                newLocalization.heroe = self.fetchHeroes(filter: filter).first
+                newLocalization.heroes = self.fetchHeroes(filter: filter).first
             }
             self.save()
         }
@@ -122,10 +141,52 @@ extension StoreDataProvider {
     }
     
     func resetBBDD(){
-        context.delete(NSMHeroes())
-        context.delete(NSMTransforms())
-        context.delete(NSMLocation())
+        let removeHeroes = NSBatchDeleteRequest(fetchRequest: NSMHeroes.fetchRequest())
+        let removeTransform = NSBatchDeleteRequest(fetchRequest: NSMTransforms.fetchRequest())
+        let removeLocation = NSBatchDeleteRequest(fetchRequest: NSMLocation.fetchRequest())
+        context.reset()
+        
+        for task in [removeHeroes, removeTransform, removeLocation] {
+            do {
+                try  context.execute(task)
+            } catch {
+                debugPrint("Error cleaning BBDD")
+            }
+        }
     }
     
-    
+}
+
+extension StoreDataProvider {
+    func deleteDatabase() {
+        guard let storeURL = self.persistentContainer.persistentStoreDescriptions.first?.url else {
+            print("No se pudo encontrar la URL del almacén persistente.")
+            return
+        }
+
+        do {
+            let persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
+            if let store = persistentStoreCoordinator.persistentStores.first {
+                try persistentStoreCoordinator.remove(store)
+                try FileManager.default.removeItem(at: storeURL)
+                print("Base de datos eliminada exitosamente.")
+            }
+        } catch {
+            print("Error al eliminar la base de datos: \(error)")
+        }
+
+        let walURL = storeURL.deletingPathExtension().appendingPathExtension("sqlite-wal")
+           let shmURL = storeURL.deletingPathExtension().appendingPathExtension("sqlite-shm")
+           
+           [storeURL, walURL, shmURL].forEach { fileURL in
+               if FileManager.default.fileExists(atPath: fileURL.path) {
+                   do {
+                       try FileManager.default.removeItem(at: fileURL)
+                       print("Archivo \(fileURL.lastPathComponent) eliminado exitosamente.")
+                   } catch {
+                       print("Error al eliminar el archivo \(fileURL.lastPathComponent): \(error)")
+                   }
+               }
+           }
+    }
 }

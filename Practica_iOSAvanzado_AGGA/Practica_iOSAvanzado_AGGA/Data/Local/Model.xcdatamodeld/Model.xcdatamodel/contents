@@ -6,7 +6,7 @@
         <attribute name="info" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="photo" optional="YES" attributeType="String"/>
-        <relationship name="location" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Location" inverseName="heroe" inverseEntity="Location"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Location" inverseName="heroes" inverseEntity="Location"/>
         <relationship name="transformations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Transforms" inverseName="heroe" inverseEntity="Transforms"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -15,11 +15,11 @@
         </uniquenessConstraints>
     </entity>
     <entity name="Location" representedClassName="NSMLocation" syncable="YES">
-        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="date" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="String"/>
-        <attribute name="latitude" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="longitude" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <relationship name="heroe" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Heroes" inverseName="location" inverseEntity="Heroes"/>
+        <attribute name="latitude" optional="YES" attributeType="String"/>
+        <attribute name="longitude" optional="YES" attributeType="String"/>
+        <relationship name="heroes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Heroes" inverseName="location" inverseEntity="Heroes"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>

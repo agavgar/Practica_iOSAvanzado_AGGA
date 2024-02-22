@@ -14,33 +14,31 @@ final class HeroesViewModel {
     var dataUpdated: (() -> Void)?
 
     //MARK: - Extern models
-    private let useCase: HeroesUseCaseProtocol
-    private var storeData = StoreDataProvider()
+    private var storeData: StoreDataProvider
+    private var apiProvider: ApiProvider
     
     //MARK: - Intern models
     private var heroes: [NSMHeroes] = []
     
     //MARK: - Initializers
     deinit {
-        // remove observer
+        removeObservers()
     }
     
-    init(useCase: HeroesUseCaseProtocol = HeroesUseCase(), storeData: StoreDataProvider = StoreDataProvider()){
-        self.useCase = useCase
+    init(apiProvider: ApiProvider = ApiProvider(), storeData: StoreDataProvider = StoreDataProvider()){
+        self.apiProvider = apiProvider
         self.storeData = storeData
-        // Observer
+        self.addObservers()
     }
     
     //MARK: - Methods for table
     func loadHeroes() {
-        
         // Limpia BBDD
-        
-        heroes = storeData.fetchHeroes(sorting: self.ordenNombre(ascending: false))
+        //storeData.resetBBDD()
+        heroes = storeData.fetchHeroes(sorting: self.sortByName(ascending: true))
         
         if heroes.isEmpty{
-            self.useCase.getHeroes { [weak self] result in
-                
+            apiProvider.getHeroes { [weak self] result in
                 switch result {
                 case .success(let heroes):
                     self?.storeData.insert(heroes: heroes)
@@ -50,7 +48,7 @@ final class HeroesViewModel {
                 
             }
         }else{
-            // notiify update data
+            notifyDataUpdated()
         }
     }
     
@@ -63,11 +61,31 @@ final class HeroesViewModel {
         return heroes[indexPath.row].id
     }
     
+    func heroesIn (indexPath: IndexPath) -> NSMHeroes? {
+        guard indexPath.row < heroes.count else { return nil }
+        return heroes[indexPath.row]
+    }
+    
+    func notifyDataUpdated() {
+        DispatchQueue.main.async {
+            self.dataUpdated?()
+        }
+    }
+    
     //MARK: - Methods for sort info
-    private func ordenNombreTransform(ascending: Bool = true) -> [NSSortDescriptor] {
+    private func sortByName(ascending: Bool = true) -> [NSSortDescriptor] {
         let sort = NSSortDescriptor(keyPath: \NSMHeroes.name, ascending: ascending)
         return [sort]
     }
     
     //MARK: - Notifications
+    private func addObservers() {
+        NotificationCenter.default.addObserver(forName: NSManagedObjectContext.didSaveObjectsNotification, object: nil, queue: .main) { notification in
+            self.heroes = self.storeData.fetchHeroes(sorting: self.sortByName(ascending: false))
+        }
+    }
+    
+    private func removeObservers() {
+        NotificationCenter.default.removeObserver(self)
+    }
 }

@@ -8,12 +8,12 @@
 import Foundation
 
 final class LoginViewModel{
-    
-    //MARK: - Binding con UI
-    var dataUpdated: (() -> Void)?
 
+    //MARK: - StateVariable
+    var isSuccess: Bool = false
+    
     //MARK: - Extern models
-    private let useCase = LoginUseCase()
+    private let apiProvider = ApiProvider()
     private var storeData = StoreDataProvider()
     
     //MARK: - Validation Methods
@@ -22,28 +22,28 @@ final class LoginViewModel{
     }
 
     //MARK: - Metodo Login
-    func onLoginButton(email: String?, password: String?) {
-        //loginViewState?(.loading(true))
-        
-        //Check mail y password
+    func onLoginButton(email: String?, password: String?) -> Bool {
         guard let email = email, let password = password, isValid(email,password) else {
-            //loginViewState?(.loading(false))
-            //loginViewState?(.loginError("email o contraseña incorrectos"))
             print("Error, email o contraseña no son válidos. ")
-            return
+            isSuccess = false
+            return isSuccess
         }
         
-        useCase.login(user: email, pass: password) { [weak self] result in
+        apiProvider.login(user: email, pass: password) { [weak self] result in
             
             switch result {
-            case .success(let token):
-                // Guardar Token en KeyChain
-                // Notificar
+            case .success(_):
+                self?.isSuccess = true
+                //self?.navigateVC()
                 break
             case .failure(let error):
                 debugPrint("Ha habido un error haciendo la conexión al login \(error)")
+                self?.isSuccess = false
+                
             }
         }
+        return isSuccess
     }
+     
     
 }

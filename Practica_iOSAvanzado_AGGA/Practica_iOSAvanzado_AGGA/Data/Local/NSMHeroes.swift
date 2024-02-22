@@ -20,7 +20,7 @@ class NSMHeroes: NSManagedObject, Identifiable {
     @NSManaged public var info: String?
     @NSManaged public var name: String?
     @NSManaged public var photo: String?
-    @NSManaged public var location: NSMLocation?
+    @NSManaged public var location: Set<NSMLocation>?
     @NSManaged public var transformations: Set<NSMTransforms>?
 
 }
@@ -39,6 +39,22 @@ extension NSMHeroes {
 
     @objc(removeTransformations:)
     @NSManaged public func removeFromTransformations(_ values: Set<NSMTransforms>)
+
+}
+
+extension NSMHeroes {
+
+    @objc(addLocationObject:)
+    @NSManaged public func addToLocation(_ value: NSMLocation)
+
+    @objc(removeLocationObject:)
+    @NSManaged public func removeFromLocation(_ value: NSMLocation)
+
+    @objc(addLocation:)
+    @NSManaged public func addToLocation(_ values: Set<NSMLocation>)
+
+    @objc(removeLocation:)
+    @NSManaged public func removeFromLocation(_ values: Set<NSMLocation>)
 
 }
 

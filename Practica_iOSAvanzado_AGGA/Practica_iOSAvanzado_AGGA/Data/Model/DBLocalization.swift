@@ -9,8 +9,8 @@ import Foundation
 
 struct DBLocalization: Decodable {
     let id: String?
-    let date: Date?
-    let latitude: Float?
-    let longitude: Float?
+    let date: String?
+    let latitude: String?
+    let longitude: String?
     let hero: DBHeroes?
 }

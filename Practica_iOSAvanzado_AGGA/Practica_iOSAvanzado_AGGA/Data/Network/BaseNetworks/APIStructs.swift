@@ -8,9 +8,9 @@
 enum EndPoints: String{
     case url = "https://dragonball.keepcoding.education/api"
     case login = "/auth/login"
-    case heroes = "/api/heros/all"
-    case transform = "/api/heros/tranformations"
-    case localization = "/api/heros/locations"
+    case heroes = "/heros/all"
+    case transform = "/heros/tranformations"
+    case localization = "/heros/locations"
 }
 
 struct HTTPMethods {

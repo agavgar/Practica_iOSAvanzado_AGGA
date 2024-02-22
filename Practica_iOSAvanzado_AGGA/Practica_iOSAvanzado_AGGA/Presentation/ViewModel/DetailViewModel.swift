@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 final class DetailViewModel {
     
@@ -13,54 +14,52 @@ final class DetailViewModel {
     var dataUpdated: (() -> Void)?
 
     //MARK: - Extern models
-    private let useCase: DetailUseCaseProtocol
-    private var storeData = StoreDataProvider()
+    private var storeData: StoreDataProvider
+    private var apiProvider: ApiProvider
     
     //MARK: - Intern models
-    private var heroe: NSMHeroes
-    private var transform: [NSMTransforms]
-    private var localization: NSMLocation
+    var heroe: NSMHeroes?
+    private var transform: [NSMTransforms] = []
+    private var localization: [NSMLocation] = []
     
     //MARK: - Initializers
     deinit {
-        // remove observer
+        removeObservers()
     }
     
-    init(heroe: NSMHeroes,useCase: DetailUseCaseProtocol = DetailUseCase(), storeData: StoreDataProvider = StoreDataProvider()){
+    init(heroe: NSMHeroes? = nil, apiProvider: ApiProvider = ApiProvider(), storeData: StoreDataProvider = StoreDataProvider()){
         self.heroe = heroe
-        self.useCase = useCase
+        self.apiProvider = apiProvider
         self.storeData = storeData
-        // Observer
+        addObservers()
     }
     
     //MARK: - Methods for table
     func loadInfo() {
         
-        guard let id = heroe.id, let selectedHero = storeData.fetchHeroes(filter: filterByID(id: id)).first else {
+        guard let hero = heroe else {
+            print("Error retrieving id Hero from DataBase")
+            return
+        }
+        
+        guard let id = hero.id else {
             print("Error retrieving id Hero from DataBase")
             return
         }
         
         transform = storeData.fetchTransform()
+        localization = storeData.fetchLocalization()
         
-        guard let localPosition = storeData.fetchLocalization().last else {
-            print("Error gettig local position")
-            return
-        }
-        localization = localPosition
-        
-        if transform.isEmpty || localization != localization {
-            
-            self.useCase.getAllInfo(idHeroe: id) { result in
-                <#code#>
-            } completionLocalization: { result in
-                <#code#>
-            }
-
-            
-            
+        if transform.isEmpty || localization.isEmpty {
+            getAllInfo(idHeroe: id)
         }else{
-            // notiify update data
+            notifyDataUpdate()
+        }
+    }
+    
+    func notifyDataUpdate(){
+        DispatchQueue.main.async {
+            self.dataUpdated?()
         }
     }
     
@@ -68,16 +67,74 @@ final class DetailViewModel {
         return transform.count
     }
     
+    func transformIn (indexPath: IndexPath) -> NSMTransforms? {
+        guard indexPath.row < transform.count else { return nil }
+        return transform[indexPath.row]
+    }
+    
+    //MARK: - Get All Info
+    func getAllInfo(idHeroe: String) {
+        
+        let queueLoad = DispatchQueue(label: "Get Detail Info",attributes: .concurrent)
+        let group = DispatchGroup()
+        group.enter()
+        queueLoad.async {
+            self.apiProvider.getLocalization(idHeroe: idHeroe) { [weak self] (result: Result<[DBLocalization], NetworkErrors>) in
+                switch result {
+                case .success(let localizations):
+                    self?.storeData.insertLocalization(localization: localizations)
+                    break
+                case .failure(let error):
+                    print("Ha habido un error en DetailUseCase, getAllInfo en getLocalization y es \(error)")
+                    break
+                }
+                group.leave()
+            }
+        }
+        
+        group.enter()
+        queueLoad.async {
+            self.apiProvider.getTransform(idHeroe: idHeroe) { [weak self] (result: Result<[DBTransformations], NetworkErrors>) in
+                switch result {
+                case .success(let transforms):
+                    // STORE DATA PROVIDER TRANSFORM
+                    self?.storeData.insert(transform: transforms)
+                    break
+                case .failure(let error):
+                    print("Ha habido un error en DetailUseCase, getAllInfo en getTransform y es \(error)")
+                }
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: .main) {
+            // Group Notify
+            self.notifyDataUpdate()
+        }
+        
+    }
+    
     //MARK: - Methods for sort info
-    private func ordenNombreTransform(ascending: Bool = true) -> [NSSortDescriptor] {
+    private func sortNameTransform(ascending: Bool = true) -> [NSSortDescriptor] {
         let sort = NSSortDescriptor(keyPath: \NSMTransforms.name, ascending: ascending)
         return [sort]
     }
     
     private func filterByID(id: String) -> NSPredicate? {
-        let filter = NSPredicate(format: "id == \(id)", heroe.id ?? "")
+        let filter = NSPredicate(format: "id == \(id)", heroe?.id ?? "")
+        return filter
     }
     
     //MARK: - Notifications
+    private func addObservers() {
+        NotificationCenter.default.addObserver(forName: NSManagedObjectContext.didSaveObjectsNotification, object: nil, queue: .main) { notification in
+            self.transform = self.storeData.fetchTransform(sorting: self.sortNameTransform(ascending: false))
+            self.localization = self.storeData.fetchLocalization()
+        }
+    }
+    
+    private func removeObservers(){
+        NotificationCenter.default.removeObserver(self)
+    }
     
 }

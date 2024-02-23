@@ -8,11 +8,11 @@
 import UIKit
 import MapKit
 
-class DetailViewController: UIViewController, MKMapViewDelegate {
+final class DetailViewController: UIViewController, MKMapViewDelegate {
 
     //MARK: - IBOutlets
     @IBOutlet weak var heroImage: UIImageView!
-    @IBOutlet weak var heroDescription: UITextView!
+    @IBOutlet weak var heroDescription: UILabel!
     @IBOutlet weak var heroName: UILabel!
     @IBOutlet weak var heroKitMap: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -23,11 +23,16 @@ class DetailViewController: UIViewController, MKMapViewDelegate {
     //MARK: - Init
     init(viewModel: DetailViewModel = DetailViewModel()) {
         self.viewModel = viewModel
-        super.init(nibName: String(describing: HeroesViewController.self), bundle: nil)
+        super.init(nibName: String(describing: DetailViewController.self), bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: - Lifecycles
+    override func viewWillAppear(_ animated: Bool) {
+        viewModel.removeInfo()
     }
     
     override func viewDidLoad() {
@@ -36,48 +41,56 @@ class DetailViewController: UIViewController, MKMapViewDelegate {
         configureUI()
         viewModel.dataUpdated = {
             self.collectionView.reloadData()
+            self.mapLocations()
         }
         viewModel.loadInfo()
         
-        
-        
-        // Do any additional setup after loading the view.
     }
     
-    func configureUI(){
+    override func viewWillDisappear(_ animated: Bool) {
+        viewModel.removeInfo()
+    }
+    
+    //MARK: - Methods
+    private func configureUI(){
         guard let hero = viewModel.heroe else {
             return
         }
         guard let urlImage = viewModel.heroe?.photo else {
             return
         }
+        
         heroImage.setImage(url: urlImage)
-        heroDescription.text = hero.description
+        heroDescription.text = hero.info
         heroName.text = hero.name
+        
+        heroDescription.numberOfLines = 30
+        heroDescription.adjustsFontSizeToFitWidth = true
         
         heroKitMap.delegate = self
         heroKitMap.mapType = .hybrid
         
+        
+        collectionView.dataSource = self
+        collectionView.delegate = self
         let nib = UINib(nibName: String(describing: DetailCollectionViewCell.self), bundle: nil)
         collectionView.register(nib, forCellWithReuseIdentifier: DetailCollectionViewCell.reuseIdentifier)
         
         collectionView.backgroundColor = .clear
         
         let backButton = UIBarButtonItem()
-        backButton.tintColor = UIColor(.yellow)
+        backButton.tintColor = UIColor(.red)
         navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
         
     }
-
-
-    func addAnnotations(){
-        /*
-        var annotations = [HeroAnnotation]()
-        for location in viewModel.heroe?.location {
-            annotations.append(HeroAnnotation(coordinate: ))
-         
+    
+    func mapLocations(){
+        guard let annotations = viewModel.addAnnotations() else { return }
+        heroKitMap.addAnnotations(annotations)
+        if let annotation = heroKitMap.annotations.first {
+            let region = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: 2000, longitudinalMeters: 2000)
+            heroKitMap.region = region
         }
-         */
     }
 
 }
@@ -94,7 +107,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             return UICollectionViewCell()
         }
         
-        guard let transform = viewModel.transformIn(indexPath: indexPath) else { debugPrint("Can't get the hero from HeroesCollection")
+        guard let transform = viewModel.transformIn(indexPath: indexPath) else { debugPrint("Can't get the trandform from DetailCollection")
             return UICollectionViewCell()
         }
         
@@ -107,7 +120,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
 extension DetailViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 50, height: 50)
+        return CGSize(width: 75, height: 75)
     }
     
 }

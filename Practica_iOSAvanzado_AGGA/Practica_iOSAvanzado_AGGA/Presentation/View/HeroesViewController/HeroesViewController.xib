@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HeroesViewController" customModule="Practica_IOSAvanzado_AGGA" customModuleProvider="target">
             <connections>
                 <outlet property="collectionView" destination="c4J-Jr-07k" id="2sH-aw-TXI"/>
+                <outlet property="searchBar" destination="Gja-Nk-nmb" id="AbP-nF-d6m"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -23,7 +24,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                 </imageView>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="c4J-Jr-07k">
-                    <rect key="frame" x="0.0" y="117" width="393" height="701"/>
+                    <rect key="frame" x="0.0" y="131" width="393" height="687"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wcT-Cy-6gn">
                         <size key="itemSize" width="140" height="140"/>
@@ -36,6 +37,11 @@
                         <outlet property="delegate" destination="-1" id="322-Cr-Fto"/>
                     </connections>
                 </collectionView>
+                <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Search" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gja-Nk-nmb">
+                    <rect key="frame" x="0.0" y="75" width="393" height="56"/>
+                    <color key="barTintColor" red="0.84854668379999998" green="0.81335741279999996" blue="0.38600012659999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
+                </searchBar>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -43,11 +49,14 @@
                 <constraint firstItem="c4J-Jr-07k" firstAttribute="leading" secondItem="M1T-RE-7ul" secondAttribute="leading" id="F6n-rN-itd"/>
                 <constraint firstAttribute="bottom" secondItem="M1T-RE-7ul" secondAttribute="bottom" id="F7O-Ct-Lnj"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="c4J-Jr-07k" secondAttribute="bottom" id="N7X-dB-fXV"/>
-                <constraint firstItem="c4J-Jr-07k" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="58" id="Nqz-9f-kVZ"/>
+                <constraint firstItem="Gja-Nk-nmb" firstAttribute="leading" secondItem="c4J-Jr-07k" secondAttribute="leading" id="N8G-9r-ejX"/>
+                <constraint firstItem="c4J-Jr-07k" firstAttribute="top" secondItem="Gja-Nk-nmb" secondAttribute="bottom" id="Nqz-9f-kVZ"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="M1T-RE-7ul" secondAttribute="trailing" id="The-Wt-TI4"/>
+                <constraint firstItem="Gja-Nk-nmb" firstAttribute="trailing" secondItem="c4J-Jr-07k" secondAttribute="trailing" id="TkF-s3-vRT"/>
                 <constraint firstItem="c4J-Jr-07k" firstAttribute="trailing" secondItem="M1T-RE-7ul" secondAttribute="trailing" id="ZKw-Ps-1FY"/>
                 <constraint firstItem="M1T-RE-7ul" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="aA0-zB-e7G"/>
                 <constraint firstItem="M1T-RE-7ul" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="fcJ-Ul-yXP"/>
+                <constraint firstItem="Gja-Nk-nmb" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="16" id="hV1-aX-QeZ"/>
             </constraints>
             <point key="canvasLocation" x="130.53435114503816" y="-11.267605633802818"/>
         </view>

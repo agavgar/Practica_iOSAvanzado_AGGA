@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-final class HeroAnnotation: NSObject, MKAnnotation {
+class HeroAnnotation: NSObject, MKAnnotation {
    
     var coordinate: CLLocationCoordinate2D
     var title: String?

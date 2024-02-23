@@ -11,6 +11,7 @@ class HeroesViewController: UIViewController {
 
     //MARK: - IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     //MARK: - Bindings
     private let viewModel: HeroesViewModel
@@ -25,9 +26,11 @@ class HeroesViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - Livecycle
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        searchBar.delegate = self
         
         configureUI()
         viewModel.dataUpdated = {
@@ -37,6 +40,7 @@ class HeroesViewController: UIViewController {
         
     }
     
+    //MARK: - Internal Methods
     func configureUI() {
         
         let nib = UINib(nibName: String(describing: HeroesViewCell.self), bundle: nil)
@@ -48,9 +52,13 @@ class HeroesViewController: UIViewController {
         backButton.tintColor = UIColor(.yellow)
         navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
         
+        searchBar.tintColor = .yellow
+        
+        
     }
 }
 
+//MARK: - UICollection Delegate & Data source
 extension HeroesViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -85,12 +93,35 @@ extension HeroesViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let nextVC = DetailViewController(viewModel:nextVM)
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
+    
 }
 
+//MARK: - UI Collection Flow Layout
 extension HeroesViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 150, height: 190)
+    }
+    
+}
+
+extension HeroesViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.filterByName(searchBarText: searchText)
+        
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        viewModel.filterByName(searchBarText: "")
+        searchBar.resignFirstResponder()
+        searchBar.showsCancelButton = false
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchBar.showsCancelButton = false
     }
     
 }

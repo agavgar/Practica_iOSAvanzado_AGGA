@@ -20,7 +20,7 @@ final class DetailViewModel {
     //MARK: - Intern models
     var heroe: NSMHeroes?
     private var transform: [NSMTransforms] = []
-    private var localization: [NSMLocation] = []
+    var localization: [NSMLocation] = []
     
     //MARK: - Initializers
     deinit {
@@ -34,6 +34,7 @@ final class DetailViewModel {
         addObservers()
     }
     
+    
     //MARK: - Methods for table
     func loadInfo() {
         
@@ -46,20 +47,36 @@ final class DetailViewModel {
             print("Error retrieving id Hero from DataBase")
             return
         }
-        
-        transform = storeData.fetchTransform()
+    
+        transform = storeData.fetchTransform(sorting: sortNameTransform(ascending: true))
         localization = storeData.fetchLocalization()
         
+        /*
+        
+        if id == transform.first?.heroe?.id {
+            localization = storeData.fetchLocalization()
+        }else{
+            storeData.resetTransformLocation()
+        }
+         */
+         
         if transform.isEmpty || localization.isEmpty {
             getAllInfo(idHeroe: id)
         }else{
             notifyDataUpdate()
         }
+         
+      
+    }
+    
+    func removeInfo(){
+        storeData.resetTransformLocation()
     }
     
     func notifyDataUpdate(){
         DispatchQueue.main.async {
             self.dataUpdated?()
+            //self.addAnnotations()
         }
     }
     
@@ -70,6 +87,10 @@ final class DetailViewModel {
     func transformIn (indexPath: IndexPath) -> NSMTransforms? {
         guard indexPath.row < transform.count else { return nil }
         return transform[indexPath.row]
+    }
+    
+    func heroLocation() -> (String?,String?) {
+        return (heroe?.name, heroe?.id)
     }
     
     //MARK: - Get All Info
@@ -114,6 +135,19 @@ final class DetailViewModel {
         
     }
     
+    func addAnnotations() -> [HeroAnnotation]? {
+        var annotations = [HeroAnnotation]()
+        for place in localization {
+            annotations.append(HeroAnnotation(
+                coordinate: .init(latitude: Double(place.latitude ?? "") ?? 0.0 , longitude: Double(place.longitude ?? "") ?? 0.0 ),
+                title: heroLocation().0,
+                id: heroLocation().1,
+                date: place.date
+            ))
+        }
+        return annotations
+    }
+    
     //MARK: - Methods for sort info
     private func sortNameTransform(ascending: Bool = true) -> [NSSortDescriptor] {
         let sort = NSSortDescriptor(keyPath: \NSMTransforms.name, ascending: ascending)
@@ -128,10 +162,11 @@ final class DetailViewModel {
     //MARK: - Notifications
     private func addObservers() {
         NotificationCenter.default.addObserver(forName: NSManagedObjectContext.didSaveObjectsNotification, object: nil, queue: .main) { notification in
-            self.transform = self.storeData.fetchTransform(sorting: self.sortNameTransform(ascending: false))
+            self.transform = self.storeData.fetchTransform(sorting: self.sortNameTransform(ascending: true))
             self.localization = self.storeData.fetchLocalization()
         }
     }
+    
     
     private func removeObservers(){
         NotificationCenter.default.removeObserver(self)

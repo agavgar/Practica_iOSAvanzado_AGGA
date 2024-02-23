@@ -19,6 +19,7 @@ final class HeroesViewModel {
     
     //MARK: - Intern models
     private var heroes: [NSMHeroes] = []
+    private var filteredHeroes: [NSMHeroes] = []
     
     //MARK: - Initializers
     deinit {
@@ -36,6 +37,7 @@ final class HeroesViewModel {
         // Limpia BBDD
         //storeData.resetBBDD()
         heroes = storeData.fetchHeroes(sorting: self.sortByName(ascending: true))
+        filteredHeroes = heroes
         
         if heroes.isEmpty{
             apiProvider.getHeroes { [weak self] result in
@@ -53,17 +55,20 @@ final class HeroesViewModel {
     }
     
     func numbOfHeroes() -> Int {
-        return heroes.count
+        //return heroes.count
+        return filteredHeroes.count
     }
     
     func idOfHero(indexPath: IndexPath) -> String? {
         guard indexPath.row < heroes.count else { return nil }
-        return heroes[indexPath.row].id
+        //return heroes[indexPath.row].id
+        return filteredHeroes[indexPath.row].id
     }
     
     func heroesIn (indexPath: IndexPath) -> NSMHeroes? {
         guard indexPath.row < heroes.count else { return nil }
-        return heroes[indexPath.row]
+        //return heroes[indexPath.row]
+        return filteredHeroes[indexPath.row]
     }
     
     func notifyDataUpdated() {
@@ -72,10 +77,22 @@ final class HeroesViewModel {
         }
     }
     
-    //MARK: - Methods for sort info
+    //MARK: - Methods for DDBB info
     private func sortByName(ascending: Bool = true) -> [NSSortDescriptor] {
         let sort = NSSortDescriptor(keyPath: \NSMHeroes.name, ascending: ascending)
         return [sort]
+    }
+    
+    func filterByName(searchBarText: String) {
+        
+        if searchBarText.isEmpty {
+            filteredHeroes = heroes
+        }else{
+            let filter = NSPredicate(format: "name CONTAINS[cd] %@", searchBarText)
+            filteredHeroes = storeData.fetchHeroes(filter: filter)
+        }
+        self.dataUpdated?()
+        
     }
     
     //MARK: - Notifications

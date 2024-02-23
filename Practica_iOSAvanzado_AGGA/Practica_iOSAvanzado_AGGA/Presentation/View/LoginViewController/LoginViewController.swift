@@ -40,6 +40,7 @@ class LoginViewController: UIViewController {
         navigateHeroes()
     }
     
+    //MARK: - Methods
     func navigateHeroes() {
         if !viewModel.onLoginButton(email: emailTextField.text, password: passTextField.text) {
             usernameLabel.text = "User or password is wrong"

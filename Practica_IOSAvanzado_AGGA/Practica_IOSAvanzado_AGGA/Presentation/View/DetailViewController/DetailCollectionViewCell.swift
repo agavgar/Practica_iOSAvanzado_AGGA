@@ -9,27 +9,22 @@ import UIKit
 
 class DetailCollectionViewCell: UICollectionViewCell {
 
-    
+    //MARK: - IBOutlets
     @IBOutlet weak var transformImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         
-        transformImage.layer.borderWidth = 1
-        transformImage.layer.masksToBounds = false
-        transformImage.layer.borderColor = UIColor.yellow.cgColor
-        transformImage.layer.cornerRadius = transformImage.frame.height/2
-        transformImage.clipsToBounds = true
-        
     }
     
+    //MARK: - Methods
     override func prepareForReuse() {
         super.prepareForReuse()
         transformImage.image = UIImage(systemName: "person.and.background.striped.horizontal")
     }
     
-    //MARK: - Methods
+
     func configure(transform: NSMTransforms) {
         guard let urlImage = transform.photo else {
             return

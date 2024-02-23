@@ -112,7 +112,7 @@ extension StoreDataProvider {
                 newLocalization.date = places.date
                 newLocalization.latitude = places.latitude ?? "0"
                 newLocalization.longitude = places.longitude ?? "0"
-                let filter = NSPredicate(format: "id == $@", places.hero?.id ?? "")
+                let filter = NSPredicate(format: "id == %@", places.hero?.id ?? "")
                 newLocalization.heroes = self.fetchHeroes(filter: filter).first
             }
             self.save()
@@ -140,7 +140,21 @@ extension StoreDataProvider {
         }
     }
     
-    func resetBBDD(){
+    func resetTransformLocation(){
+        let removeTransform = NSBatchDeleteRequest(fetchRequest: NSMTransforms.fetchRequest())
+        let removeLocation = NSBatchDeleteRequest(fetchRequest: NSMLocation.fetchRequest())
+        context.reset()
+        
+        for task in [removeTransform, removeLocation] {
+            do {
+                try  context.execute(task)
+            } catch {
+                debugPrint("Error reseting transform and location DDBB")
+            }
+        }
+    }
+    
+    func removeDDBB(){
         let removeHeroes = NSBatchDeleteRequest(fetchRequest: NSMHeroes.fetchRequest())
         let removeTransform = NSBatchDeleteRequest(fetchRequest: NSMTransforms.fetchRequest())
         let removeLocation = NSBatchDeleteRequest(fetchRequest: NSMLocation.fetchRequest())
@@ -150,43 +164,9 @@ extension StoreDataProvider {
             do {
                 try  context.execute(task)
             } catch {
-                debugPrint("Error cleaning BBDD")
+                debugPrint("Error cleaning DDBB")
             }
         }
     }
     
-}
-
-extension StoreDataProvider {
-    func deleteDatabase() {
-        guard let storeURL = self.persistentContainer.persistentStoreDescriptions.first?.url else {
-            print("No se pudo encontrar la URL del almacén persistente.")
-            return
-        }
-
-        do {
-            let persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
-            if let store = persistentStoreCoordinator.persistentStores.first {
-                try persistentStoreCoordinator.remove(store)
-                try FileManager.default.removeItem(at: storeURL)
-                print("Base de datos eliminada exitosamente.")
-            }
-        } catch {
-            print("Error al eliminar la base de datos: \(error)")
-        }
-
-        let walURL = storeURL.deletingPathExtension().appendingPathExtension("sqlite-wal")
-           let shmURL = storeURL.deletingPathExtension().appendingPathExtension("sqlite-shm")
-           
-           [storeURL, walURL, shmURL].forEach { fileURL in
-               if FileManager.default.fileExists(atPath: fileURL.path) {
-                   do {
-                       try FileManager.default.removeItem(at: fileURL)
-                       print("Archivo \(fileURL.lastPathComponent) eliminado exitosamente.")
-                   } catch {
-                       print("Error al eliminar el archivo \(fileURL.lastPathComponent): \(error)")
-                   }
-               }
-           }
-    }
 }

@@ -16,6 +16,8 @@ class HeroesViewController: UIViewController {
     //MARK: - Bindings
     private let viewModel: HeroesViewModel
     
+    
+    
     //MARK: - Init
     init(viewModel: HeroesViewModel = HeroesViewModel()) {
         self.viewModel = viewModel
@@ -52,9 +54,25 @@ class HeroesViewController: UIViewController {
         backButton.tintColor = UIColor(.yellow)
         navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
         
+        setRightBar(UInavItem: self.navigationItem, UInavCont: self.navigationController!)
+        
         searchBar.tintColor = .yellow
         
+    }
+    
+    func setRightBar(UInavItem: UINavigationItem,UInavCont: UINavigationController ){
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(logOut))
         
+        navigationItem.rightBarButtonItem?.tintColor = .yellow
+        
+    }
+    
+    @objc
+    func logOut(_sender: Any) {
+        viewModel.eraseAll()
+        let nextVM = LoginViewModel()
+        let nextVC = LoginViewController(viewModel:nextVM)
+        self.navigationController?.setViewControllers([nextVC], animated: true)
     }
 }
 
@@ -113,7 +131,7 @@ extension HeroesViewController: UISearchBarDelegate {
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = ""
+        //searchBar.text = ""
         viewModel.filterByName(searchBarText: "")
         searchBar.resignFirstResponder()
         searchBar.showsCancelButton = false

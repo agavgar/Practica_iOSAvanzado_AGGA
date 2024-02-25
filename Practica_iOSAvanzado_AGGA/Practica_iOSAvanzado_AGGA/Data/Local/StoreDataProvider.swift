@@ -109,9 +109,8 @@ extension StoreDataProvider {
             for places in localization {
                 let newLocalization = NSMLocation(context: context)
                 newLocalization.id = places.id
-                newLocalization.date = places.date
-                newLocalization.latitude = places.latitude ?? "0"
-                newLocalization.longitude = places.longitude ?? "0"
+                newLocalization.latitude = places.latitud ?? "not latitude"
+                newLocalization.longitude = places.longitud ?? "not longitude"
                 let filter = NSPredicate(format: "id == %@", places.hero?.id ?? "")
                 newLocalization.heroes = self.fetchHeroes(filter: filter).first
             }

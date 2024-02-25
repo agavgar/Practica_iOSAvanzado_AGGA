@@ -14,8 +14,8 @@
                 <outlet property="collectionView" destination="dSp-YJ-330" id="kE8-DY-YpQ"/>
                 <outlet property="heroDescription" destination="zu6-Hk-fsZ" id="KDR-PF-TGO"/>
                 <outlet property="heroImage" destination="Un3-Ic-JXX" id="5kj-Rt-qR5"/>
-                <outlet property="heroKitMap" destination="nPa-Vp-byz" id="vMf-TL-jCy"/>
                 <outlet property="heroName" destination="OSD-ZK-eWK" id="48c-P0-XDx"/>
+                <outlet property="mapView" destination="nPa-Vp-byz" id="2mO-KX-f4V"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="tqs-Cm-6cG"/>
             </connections>
         </placeholder>
@@ -66,7 +66,7 @@
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="40" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zu6-Hk-fsZ" userLabel="Description">
                             <rect key="frame" x="0.0" y="109" width="353" height="95"/>
                             <string key="text">ashjkldhasdjkashdjkashjkdhasjkdhasjkhdjkashdkjahsdkjhaskjdhaskjdhkasjhdjkahsdjkashdjkashdkjashdjkhaskjdhaskjdasndlaskmdnlasndlansm,nd,mnasm,dnas,mdnm,asmndm,asnd,masndm,nasdm,nas,mdnasm,nd,masnd,mnas,dmnas,mdna,snd</string>
-                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -89,7 +89,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="175" id="liM-vL-yaK"/>
                     </constraints>
-                    <standardMapConfiguration key="preferredConfiguration"/>
+                    <hybridMapConfiguration key="preferredConfiguration"/>
                 </mapView>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="747" verticalCompressionResistancePriority="747" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="dSp-YJ-330">
                     <rect key="frame" x="0.0" y="702" width="393" height="100"/>

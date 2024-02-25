@@ -34,12 +34,11 @@ final class HeroesViewModel {
     
     //MARK: - Methods for table
     func loadHeroes() {
-        // Limpia BBDD
-        //storeData.resetBBDD()
+
         heroes = storeData.fetchHeroes(sorting: self.sortByName(ascending: true))
         filteredHeroes = heroes
         
-        if heroes.isEmpty{
+        if heroes.isEmpty || filteredHeroes.isEmpty{
             apiProvider.getHeroes { [weak self] result in
                 switch result {
                 case .success(let heroes):
@@ -77,6 +76,12 @@ final class HeroesViewModel {
         }
     }
     
+    func eraseAll(){
+        storeData.removeDDBB()
+        let secData = SecureData()
+        secData.deleteToken()
+    }
+    
     //MARK: - Methods for DDBB info
     private func sortByName(ascending: Bool = true) -> [NSSortDescriptor] {
         let sort = NSSortDescriptor(keyPath: \NSMHeroes.name, ascending: ascending)
@@ -98,7 +103,7 @@ final class HeroesViewModel {
     //MARK: - Notifications
     private func addObservers() {
         NotificationCenter.default.addObserver(forName: NSManagedObjectContext.didSaveObjectsNotification, object: nil, queue: .main) { notification in
-            self.heroes = self.storeData.fetchHeroes(sorting: self.sortByName(ascending: false))
+            self.heroes = self.storeData.fetchHeroes(sorting: self.sortByName(ascending: true))
         }
     }
     

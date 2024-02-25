@@ -21,6 +21,7 @@ final class DetailViewModel {
     var heroe: NSMHeroes?
     private var transform: [NSMTransforms] = []
     var localization: [NSMLocation] = []
+    var annotations = [HeroAnnotation]()
     
     //MARK: - Initializers
     deinit {
@@ -50,23 +51,21 @@ final class DetailViewModel {
     
         transform = storeData.fetchTransform(sorting: sortNameTransform(ascending: true))
         localization = storeData.fetchLocalization()
-        
-        /*
-        
-        if id == transform.first?.heroe?.id {
-            localization = storeData.fetchLocalization()
-        }else{
-            storeData.resetTransformLocation()
-        }
-         */
-         
+    
         if transform.isEmpty || localization.isEmpty {
+            removeInfo()
             getAllInfo(idHeroe: id)
         }else{
-            notifyDataUpdate()
+            if id == transform.first?.heroe?.id && id == localization.first?.heroes?.id {
+                notifyDataUpdate()
+            }else{
+                removeInfo()
+                getAllInfo(idHeroe: id)
+                notifyDataUpdate()
+            }
+            
         }
-         
-      
+        
     }
     
     func removeInfo(){
@@ -93,6 +92,12 @@ final class DetailViewModel {
         return (heroe?.name, heroe?.id)
     }
     
+    func eraseAll(){
+        storeData.removeDDBB()
+        let secData = SecureData()
+        secData.deleteToken()
+    }
+    
     //MARK: - Get All Info
     func getAllInfo(idHeroe: String) {
         
@@ -104,6 +109,7 @@ final class DetailViewModel {
                 switch result {
                 case .success(let localizations):
                     self?.storeData.insertLocalization(localization: localizations)
+                    self?.annotations = (self?.addAnnotations())!
                     break
                 case .failure(let error):
                     print("Ha habido un error en DetailUseCase, getAllInfo en getLocalization y es \(error)")
@@ -135,15 +141,15 @@ final class DetailViewModel {
         
     }
     
-    func addAnnotations() -> [HeroAnnotation]? {
+    func addAnnotations() -> [HeroAnnotation] {
         var annotations = [HeroAnnotation]()
         for place in localization {
             annotations.append(HeroAnnotation(
                 coordinate: .init(latitude: Double(place.latitude ?? "") ?? 0.0 , longitude: Double(place.longitude ?? "") ?? 0.0 ),
-                title: heroLocation().0,
-                id: heroLocation().1,
-                date: place.date
+                title: heroLocation().0 ?? "",
+                id: heroLocation().1 ?? ""
             ))
+            
         }
         return annotations
     }
@@ -164,6 +170,7 @@ final class DetailViewModel {
         NotificationCenter.default.addObserver(forName: NSManagedObjectContext.didSaveObjectsNotification, object: nil, queue: .main) { notification in
             self.transform = self.storeData.fetchTransform(sorting: self.sortNameTransform(ascending: true))
             self.localization = self.storeData.fetchLocalization()
+            self.annotations = self.addAnnotations()
         }
     }
     

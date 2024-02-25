@@ -15,7 +15,6 @@ class NSMLocation: NSManagedObject, Identifiable {
         return NSFetchRequest<NSMLocation>(entityName: "Location")
     }
     
-    @NSManaged public var date: String?
     @NSManaged public var id: String?
     @NSManaged public var latitude: String?
     @NSManaged public var longitude: String?

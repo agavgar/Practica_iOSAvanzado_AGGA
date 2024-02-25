@@ -14,7 +14,7 @@ final class DetailViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var heroImage: UIImageView!
     @IBOutlet weak var heroDescription: UILabel!
     @IBOutlet weak var heroName: UILabel!
-    @IBOutlet weak var heroKitMap: MKMapView!
+    @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
     
     //MARK: - Models
@@ -30,11 +30,7 @@ final class DetailViewController: UIViewController, MKMapViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - Lifecycles
-    override func viewWillAppear(_ animated: Bool) {
-        viewModel.removeInfo()
-    }
-    
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -44,14 +40,10 @@ final class DetailViewController: UIViewController, MKMapViewDelegate {
             self.mapLocations()
         }
         viewModel.loadInfo()
-        
+        mapLocations()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        viewModel.removeInfo()
-    }
-    
-    //MARK: - Methods
+    //MARK: - UIMethod
     private func configureUI(){
         guard let hero = viewModel.heroe else {
             return
@@ -67,9 +59,8 @@ final class DetailViewController: UIViewController, MKMapViewDelegate {
         heroDescription.numberOfLines = 30
         heroDescription.adjustsFontSizeToFitWidth = true
         
-        heroKitMap.delegate = self
-        heroKitMap.mapType = .hybrid
-        
+        mapView.delegate = self
+        mapView.mapType = .hybrid
         
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -82,19 +73,53 @@ final class DetailViewController: UIViewController, MKMapViewDelegate {
         backButton.tintColor = UIColor(.red)
         navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
         
+        setRightBar(UInavItem: self.navigationItem, UInavCont: self.navigationController!)
+        
     }
     
+    func setRightBar(UInavItem: UINavigationItem,UInavCont: UINavigationController ){
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(logOut))
+        
+        navigationItem.rightBarButtonItem?.tintColor = .yellow
+        
+    }
+    
+    @objc
+    func logOut(_sender: Any) {
+        viewModel.eraseAll()
+        let nextVM = LoginViewModel()
+        let nextVC = LoginViewController(viewModel:nextVM)
+        self.navigationController?.setViewControllers([nextVC], animated: true)
+    }
+    //MARK: - Map Delegate and Methods
     func mapLocations(){
-        guard let annotations = viewModel.addAnnotations() else { return }
-        heroKitMap.addAnnotations(annotations)
-        if let annotation = heroKitMap.annotations.first {
+        mapView.addAnnotations(viewModel.annotations)
+        if let annotation = mapView.annotations.first {
             let region = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: 2000, longitudinalMeters: 2000)
-            heroKitMap.region = region
+            mapView.setRegion(region, animated: true)
         }
     }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        let identifier = HeroAnnotationView.reuseIdentifier
 
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+            if annotationView == nil {
+                annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                annotationView!.canShowCallout = true
+            } else {
+                annotationView!.annotation = annotation
+            }
+
+            annotationView!.image = UIImage(named: "locationLogo")
+
+            return annotationView
+    }
+    
 }
 
+//MARK: - Collection view Delegate and DataSource
 extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -116,7 +141,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
 }
-
+//MARK: - Collection View FlowLayout Delegate
 extension DetailViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

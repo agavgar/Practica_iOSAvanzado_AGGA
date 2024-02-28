@@ -51,7 +51,7 @@ class HeroesViewController: UIViewController {
         collectionView.backgroundColor = .clear
         
         let backButton = UIBarButtonItem()
-        backButton.tintColor = UIColor(.yellow)
+        backButton.tintColor = .yellow
         navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
         
         setRightBar(UInavItem: self.navigationItem, UInavCont: self.navigationController!)

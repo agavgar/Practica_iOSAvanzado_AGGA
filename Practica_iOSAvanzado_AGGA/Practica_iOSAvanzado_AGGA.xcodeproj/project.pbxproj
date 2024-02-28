@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E179CAF2B8F299A00004533 /* TestStoreDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E179CAE2B8F299A00004533 /* TestStoreDataProvider.swift */; };
+		6E179CB12B8F397D00004533 /* MockSecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E179CB02B8F397D00004533 /* MockSecureData.swift */; };
 		6E34E0D22B8BB55B00AACB21 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E34E0D12B8BB55B00AACB21 /* MockURLProtocol.swift */; };
-		6E34E0D42B8BBBAC00AACB21 /* APiProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E34E0D32B8BBBAC00AACB21 /* APiProviderTests.swift */; };
+		6E34E0D42B8BBBAC00AACB21 /* TestApiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E34E0D32B8BBBAC00AACB21 /* TestApiProvider.swift */; };
 		6E34E0D62B8DD39200AACB21 /* MockHeroes.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E34E0D52B8DD39200AACB21 /* MockHeroes.json */; };
 		6E34E0DC2B8DD3E900AACB21 /* MockTransform.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E34E0DB2B8DD3E900AACB21 /* MockTransform.json */; };
 		6E34E0DE2B8DD3F900AACB21 /* MockLocation.json in Resources */ = {isa = PBXBuildFile; fileRef = 6E34E0DD2B8DD3F900AACB21 /* MockLocation.json */; };
@@ -28,7 +30,6 @@
 		6EBB2D782B7CB19500B827C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBB2D772B7CB19500B827C5 /* AppDelegate.swift */; };
 		6EBB2D7A2B7CB19500B827C5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBB2D792B7CB19500B827C5 /* SceneDelegate.swift */; };
 		6EBB2D812B7CB19600B827C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EBB2D802B7CB19600B827C5 /* Assets.xcassets */; };
-		6EBB2D8F2B7CB19600B827C5 /* Practica_IOSAvanzado_AGGATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBB2D8E2B7CB19600B827C5 /* Practica_IOSAvanzado_AGGATests.swift */; };
 		6EBB2D992B7CB19600B827C5 /* Practica_IOSAvanzado_AGGAUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBB2D982B7CB19600B827C5 /* Practica_IOSAvanzado_AGGAUITests.swift */; };
 		6EBB2D9B2B7CB19600B827C5 /* Practica_IOSAvanzado_AGGAUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBB2D9A2B7CB19600B827C5 /* Practica_IOSAvanzado_AGGAUITestsLaunchTests.swift */; };
 		6EBB2DB12B7CB30500B827C5 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6EBB2DAF2B7CB30500B827C5 /* Model.xcdatamodeld */; };
@@ -126,8 +127,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6E179CAE2B8F299A00004533 /* TestStoreDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestStoreDataProvider.swift; sourceTree = "<group>"; };
+		6E179CB02B8F397D00004533 /* MockSecureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSecureData.swift; sourceTree = "<group>"; };
 		6E34E0D12B8BB55B00AACB21 /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
-		6E34E0D32B8BBBAC00AACB21 /* APiProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APiProviderTests.swift; sourceTree = "<group>"; };
+		6E34E0D32B8BBBAC00AACB21 /* TestApiProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestApiProvider.swift; sourceTree = "<group>"; };
 		6E34E0D52B8DD39200AACB21 /* MockHeroes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockHeroes.json; sourceTree = "<group>"; };
 		6E34E0DB2B8DD3E900AACB21 /* MockTransform.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockTransform.json; sourceTree = "<group>"; };
 		6E34E0DD2B8DD3F900AACB21 /* MockLocation.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockLocation.json; sourceTree = "<group>"; };
@@ -141,7 +144,6 @@
 		6EBB2D802B7CB19600B827C5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6EBB2D852B7CB19600B827C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6EBB2D8A2B7CB19600B827C5 /* Practica_IOSAvanzado_AGGATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Practica_IOSAvanzado_AGGATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6EBB2D8E2B7CB19600B827C5 /* Practica_IOSAvanzado_AGGATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Practica_IOSAvanzado_AGGATests.swift; sourceTree = "<group>"; };
 		6EBB2D942B7CB19600B827C5 /* Practica_IOSAvanzado_AGGAUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Practica_IOSAvanzado_AGGAUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EBB2D982B7CB19600B827C5 /* Practica_IOSAvanzado_AGGAUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Practica_IOSAvanzado_AGGAUITests.swift; sourceTree = "<group>"; };
 		6EBB2D9A2B7CB19600B827C5 /* Practica_IOSAvanzado_AGGAUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Practica_IOSAvanzado_AGGAUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				6E34E0D12B8BB55B00AACB21 /* MockURLProtocol.swift */,
+				6E179CB02B8F397D00004533 /* MockSecureData.swift */,
 				6E34E0D52B8DD39200AACB21 /* MockHeroes.json */,
 				6E34E0DB2B8DD3E900AACB21 /* MockTransform.json */,
 				6E34E0DD2B8DD3F900AACB21 /* MockLocation.json */,
@@ -300,8 +303,8 @@
 			isa = PBXGroup;
 			children = (
 				6E34E0D02B8BB53600AACB21 /* Mocks */,
-				6EBB2D8E2B7CB19600B827C5 /* Practica_IOSAvanzado_AGGATests.swift */,
-				6E34E0D32B8BBBAC00AACB21 /* APiProviderTests.swift */,
+				6E34E0D32B8BBBAC00AACB21 /* TestApiProvider.swift */,
+				6E179CAE2B8F299A00004533 /* TestStoreDataProvider.swift */,
 			);
 			path = Practica_IOSAvanzado_AGGATests;
 			sourceTree = "<group>";
@@ -596,16 +599,17 @@
 				6EA5D48E2B7E849200F901A6 /* UIImage+URL+Gif.swift in Sources */,
 				6EEBA0842B7F5A270085B788 /* APIStructs.swift in Sources */,
 				6EEBA0782B7F55340085B788 /* NSMHeroes.swift in Sources */,
-				6EBB2D8F2B7CB19600B827C5 /* Practica_IOSAvanzado_AGGATests.swift in Sources */,
 				6EC092A22B8623B100EACE0E /* UICell+Reuse.swift in Sources */,
 				6E6A33AF2B84D6D600E18333 /* HeroesViewModel.swift in Sources */,
 				6EEBA0702B7F4C210085B788 /* LoginViewModel.swift in Sources */,
 				6EC0929B2B860DAF00EACE0E /* HeroesViewCell.swift in Sources */,
+				6E179CB12B8F397D00004533 /* MockSecureData.swift in Sources */,
 				6EEBA0912B7F5F0A0085B788 /* DBLocalization.swift in Sources */,
 				6EEBA0892B7F5EE30085B788 /* DBHeroes.swift in Sources */,
 				6EBB2DB22B7CB30500B827C5 /* Model.xcdatamodeld in Sources */,
 				6EBB2DB62B7CB57E00B827C5 /* NetworkErrors.swift in Sources */,
-				6E34E0D42B8BBBAC00AACB21 /* APiProviderTests.swift in Sources */,
+				6E179CAF2B8F299A00004533 /* TestStoreDataProvider.swift in Sources */,
+				6E34E0D42B8BBBAC00AACB21 /* TestApiProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

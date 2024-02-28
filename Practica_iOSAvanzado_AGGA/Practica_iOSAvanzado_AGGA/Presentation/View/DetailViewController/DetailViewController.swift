@@ -70,7 +70,7 @@ final class DetailViewController: UIViewController, MKMapViewDelegate {
         collectionView.backgroundColor = .clear
         
         let backButton = UIBarButtonItem()
-        backButton.tintColor = UIColor(.red)
+        backButton.tintColor = .red
         navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
         
         setRightBar(UInavItem: self.navigationItem, UInavCont: self.navigationController!)

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DBTransformations: Decodable {
+struct DBTransformations: Codable {
     let id: String?
     let name: String?
     let description: String?
@@ -15,3 +15,5 @@ struct DBTransformations: Decodable {
     let hero: DBHeroes?
     
 }
+
+extension DBTransformations: Equatable{}

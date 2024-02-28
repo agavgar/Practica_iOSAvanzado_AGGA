@@ -7,10 +7,12 @@
 
 import Foundation
 
-struct DBHeroes: Decodable {
+struct DBHeroes: Codable {
     let name: String?
     let id: String?
     let favorite: Bool?
     let description: String?
     let photo: String?
 }
+
+extension DBHeroes: Equatable{}

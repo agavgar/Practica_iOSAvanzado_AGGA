@@ -7,9 +7,11 @@
 
 import Foundation
 
-struct DBLocalization: Decodable {
+struct DBLocalization: Codable {
     let id: String?
     let latitud: String?
     let longitud: String?
     let hero: DBHeroes?
 }
+
+extension DBLocalization: Equatable{}

@@ -9,9 +9,11 @@ import Foundation
 
 final class ApiProvider {
     
-    private var secureData: SecureDataProtocol
+    private let sessions: URLSession
+    private let secureData: SecureDataProtocol
     
-    init(secureData: SecureDataProtocol = SecureData()) {
+    init(sessions: URLSession = URLSession.shared, secureData: SecureDataProtocol = SecureData()) {
+        self.sessions = sessions
         self.secureData = secureData
     }
     
@@ -33,7 +35,7 @@ final class ApiProvider {
         request.httpMethod = HTTPMethods.post
         request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: HTTPMethods.auth)
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        let task = sessions.dataTask(with: request) { data, response, error in
         
             guard error == nil else {
                 completion(.failure(.unknown))
@@ -101,7 +103,7 @@ final class ApiProvider {
         urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: HTTPMethods.auth)
         urlRequest.httpBody = urlComponents.query?.data(using: .utf8)
    
-        let task = URLSession.shared.dataTask(with: urlRequest) { data,response,error in
+        let task = sessions.dataTask(with: urlRequest) { data,response,error in
             
             guard error == nil else {
                 completion(.failure(.unknown))

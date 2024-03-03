@@ -16,4 +16,15 @@ struct DBTransformations: Codable {
     
 }
 
-extension DBTransformations: Equatable{}
+extension DBTransformations: Equatable{
+    
+    static func == (lhs: DBTransformations, rhs: DBTransformations) -> Bool {
+        return
+        lhs.id == rhs.id &&
+        lhs.name == rhs.name &&
+        lhs.description == rhs.description &&
+        lhs.photo == rhs.photo &&
+        lhs.hero == rhs.hero
+    }
+    
+}

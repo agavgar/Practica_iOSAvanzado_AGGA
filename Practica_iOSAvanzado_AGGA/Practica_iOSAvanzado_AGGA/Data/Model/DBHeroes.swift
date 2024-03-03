@@ -15,4 +15,15 @@ struct DBHeroes: Codable {
     let photo: String?
 }
 
-extension DBHeroes: Equatable{}
+extension DBHeroes: Equatable{
+    
+    static func == (lhs: DBHeroes, rhs: DBHeroes) -> Bool {
+        return
+        lhs.name == rhs.name &&
+        lhs.id == rhs.id &&
+        lhs.favorite == rhs.favorite &&
+        lhs.description == rhs.description &&
+        lhs.photo == rhs.photo
+    }
+    
+}

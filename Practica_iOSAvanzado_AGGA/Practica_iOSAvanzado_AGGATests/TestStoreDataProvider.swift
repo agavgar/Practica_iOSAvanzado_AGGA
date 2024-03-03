@@ -42,7 +42,7 @@ final class TestStoreDataProvider: XCTestCase {
     
     func testInsertAndFetchHeroes_Success() {
         let fakeHeroes = fakeGoku
-        storeDataProvider.insert(heroes: fakeHeroes)
+        storeDataProvider.insert(heroes: fakeGoku)
         let fetchedHeroes = storeDataProvider.fetchHeroes()
         XCTAssertFalse(fetchedHeroes.isEmpty, "Fetch Hero not empty")
         XCTAssertEqual(fetchedHeroes.first?.name, "Goku")
@@ -56,7 +56,9 @@ final class TestStoreDataProvider: XCTestCase {
                 photo: "https://areajugones.sport.es/wp-content/uploads/2017/05/SSJ3.png",
                 hero: fakeGoku.first
             )]
+            storeDataProvider.insert(heroes: fakeGoku)
             storeDataProvider.insert(transform: fakeTransformations)
+            
             
             let fetchedTransforms = storeDataProvider.fetchTransform()
             XCTAssertFalse(fetchedTransforms.isEmpty, "Fetching transformations not empty")
@@ -71,11 +73,12 @@ final class TestStoreDataProvider: XCTestCase {
                 latitud: "35.71867899343361",
                 longitud: "139.8202084625344",
                 hero: fakeGoku.first
-                                                   )]
+            )]
+            storeDataProvider.insert(heroes: fakeGoku)
             storeDataProvider.insertLocalization(localization: fakeLocalizations)
             
             let fetchedLocations = storeDataProvider.fetchLocalization()
-            XCTAssertFalse(fetchedLocations.isEmpty, "Fetching localizations not empty insertion")
+            XCTAssertFalse(fetchedLocations.isEmpty, "Fetching localizations not empty")
             XCTAssertEqual(fetchedLocations.first?.heroes?.name, "Goku")
             XCTAssertEqual(fetchedLocations.first?.latitude, "35.71867899343361")
         }

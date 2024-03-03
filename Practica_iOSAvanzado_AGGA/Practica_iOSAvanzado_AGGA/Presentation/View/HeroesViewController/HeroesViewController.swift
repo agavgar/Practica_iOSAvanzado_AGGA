@@ -16,8 +16,6 @@ class HeroesViewController: UIViewController {
     //MARK: - Bindings
     private let viewModel: HeroesViewModel
     
-    
-    
     //MARK: - Init
     init(viewModel: HeroesViewModel = HeroesViewModel()) {
         self.viewModel = viewModel
@@ -39,6 +37,8 @@ class HeroesViewController: UIViewController {
             self.collectionView.reloadData()
         }
         viewModel.loadHeroes()
+        collectionView.reloadData()
+        
         
     }
     

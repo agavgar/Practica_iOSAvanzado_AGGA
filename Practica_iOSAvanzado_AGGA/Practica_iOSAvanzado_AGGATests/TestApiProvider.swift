@@ -7,10 +7,11 @@
 
 import XCTest
 @testable import Practica_IOSAvanzado_AGGA
+
 final class TestApiProvider: XCTestCase {
     
     var sut: ApiProvider!
-    var mockSecureData: MockSecureData!
+    var mockSecureData: SecureData!
     
     let fakeGoku = [DBHeroes(
         name: "Goku",
@@ -35,13 +36,13 @@ final class TestApiProvider: XCTestCase {
     
     override func setUpWithError() throws {
         try super.setUpWithError()
-        mockSecureData = MockSecureData()
+        mockSecureData = SecureData()
         
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [MockURLProtocol.self]
         let session = URLSession(configuration: config)
         
-        sut = ApiProvider(secureData: mockSecureData as! SecureDataProtocol)
+        sut = ApiProvider(sessions: session, secureData: mockSecureData)
         
     }
     
@@ -73,6 +74,7 @@ final class TestApiProvider: XCTestCase {
                 print("\(token)")
                 XCTAssertEqual(token, expectedToken, "Token not match")
                 XCTAssertEqual(self.mockSecureData.getToken(), expectedToken, "Token not saved")
+                loginExpectation.fulfill()
             case .failure(_):
                 XCTFail("Failed Login")
             }
@@ -87,89 +89,84 @@ final class TestApiProvider: XCTestCase {
         let fakeHero = fakeGoku
         let fakeResponseData = try! JSONEncoder().encode(fakeHero)
         MockURLProtocol.handler = { request in
-            let response = MockURLProtocol.urlResponseFor(url: request.url!, statusCode: 200)!
-            return (response, fakeResponseData)
+            XCTAssertEqual(request.url?.absoluteString, "\(EndPoints.url.rawValue)\(EndPoints.heroes.rawValue)")
+            return (MockURLProtocol.urlResponseFor(url: request.url!)!, fakeResponseData)
         }
         
-        let expectation = self.expectation(description: "Heroes SUCCES")
-        let mockSecureData = MockSecureData()
-        mockSecureData.setToken(token: "token")
-        let sut = ApiProvider(secureData: mockSecureData as! SecureDataProtocol)
+        let expectation = self.expectation(description: "Heroes  successfully")
         
         // When
         sut.getHeroes { result in
-            // Assert
             switch result {
             case .success(let heroes):
                 XCTAssertEqual(heroes, fakeHero)
-            case .failure:
-                XCTFail("Expected success but got failure")
+            case .failure(let error):
+                XCTFail("Failure with error: \(error)")
             }
             expectation.fulfill()
         }
         
         // Then
         wait(for: [expectation], timeout: 1.0)
+        MockURLProtocol.handler = nil
     }
     
     func testGetTransformSuccess() {
         // Given
         let fakeTransformation = fakeTransform
         let responseData = try! JSONEncoder().encode(fakeTransformation)
+        guard let heroID = fakeTransformation.first?.id else { return }
         MockURLProtocol.handler = { request in
-            let response = MockURLProtocol.urlResponseFor(url: request.url!, statusCode: 200)!
-            return (response, responseData)
+            XCTAssertEqual(request.url?.absoluteString, "\(EndPoints.url.rawValue)\(EndPoints.transform.rawValue)")
+            let urlTransform = MockURLProtocol.urlResponseFor(url: request.url!, statusCode: 200)!
+            return (urlTransform, responseData)
         }
         
-        let expectation = self.expectation(description: "Transform SUCCESS")
-        let mockSecureData = MockSecureData()
-        mockSecureData.setToken(token: "token")
-        let sut = ApiProvider(secureData: mockSecureData as! SecureDataProtocol)
+        let expectation = self.expectation(description: "Transformations fetched")
         
         // When
-        sut.getTransform(idHeroe: fakeTransformation.first!.id!) { result in
-            // Assert
+        sut.getTransform(idHeroe: heroID) { result in
             switch result {
-            case .success(let transform):
-                XCTAssertEqual(transform, fakeTransformation)
-            case .failure:
-                XCTFail("Expected success but got failure")
+            case .success(let transformations):
+                XCTAssertEqual(transformations, fakeTransformation, " transformations = fakeData")
+            case .failure(let error):
+                XCTFail("Expected success but got failure with error: \(error)")
             }
             expectation.fulfill()
         }
         
         // Then
         wait(for: [expectation], timeout: 1.0)
+        MockURLProtocol.handler = nil
     }
     
     func testGetLocationSuccess() {
         // Given
         let fakeLocation = fakeLocation
         let responseData = try! JSONEncoder().encode(fakeLocation)
+        guard let heroID = fakeLocation.first?.id else { return }
         MockURLProtocol.handler = { request in
-            let response = MockURLProtocol.urlResponseFor(url: request.url!, statusCode: 200)!
-            return (response, responseData)
+            XCTAssertEqual(request.url?.absoluteString, "\(EndPoints.url.rawValue)\(EndPoints.localization.rawValue)")
+            let urlLocation = MockURLProtocol.urlResponseFor(url: request.url!, statusCode: 200)!
+            return (urlLocation, responseData)
         }
         
-        let expectation = self.expectation(description: "Transform SUCCESS")
-        let mockSecureData = MockSecureData()
-        mockSecureData.setToken(token: "token")
-        let sut = ApiProvider(secureData: mockSecureData)
+        let expectation = self.expectation(description: "Transformations fetched")
         
         // When
-        sut.getLocalization(idHeroe: fakeLocation.first!.id!) { result in
-            // Assert
+        sut.getLocalization(idHeroe: heroID) { result in
             switch result {
-            case .success(let transform):
-                XCTAssertEqual(transform, fakeLocation)
-            case .failure:
-                XCTFail("Expected success but got failure")
+            case .success(let localization):
+                XCTAssertEqual(localization, fakeLocation, " locations = fakeData")
+            case .failure(let error):
+                XCTFail("Expected success but got failure with error: \(error)")
             }
             expectation.fulfill()
         }
         
         // Then
         wait(for: [expectation], timeout: 1.0)
+        MockURLProtocol.handler = nil
     }
     
 }

@@ -14,4 +14,14 @@ struct DBLocalization: Codable {
     let hero: DBHeroes?
 }
 
-extension DBLocalization: Equatable{}
+extension DBLocalization: Equatable{
+    
+    static func == (lhs: DBLocalization, rhs: DBLocalization) -> Bool {
+        return
+        lhs.id == rhs.id &&
+        lhs.latitud == rhs.latitud &&
+        lhs.longitud == rhs.longitud &&
+        lhs.hero == rhs.hero
+    }
+    
+}

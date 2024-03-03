@@ -6,6 +6,7 @@
 //
 
 import Foundation
+@testable import Practica_IOSAvanzado_AGGA
 
 final class MockURLProtocol: URLProtocol {
     
@@ -41,6 +42,8 @@ final class MockURLProtocol: URLProtocol {
         }
         
     }
+    
+    override func stopLoading() { }
     
     static func urlResponseFor(url: URL, statusCode: Int = 200) -> HTTPURLResponse? {
         return HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: nil, headerFields: ["Content-Type" : "applicatioon/json"])

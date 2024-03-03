@@ -6,8 +6,15 @@
 //
 
 import Foundation
+@testable import Practica_IOSAvanzado_AGGA
 
-final class MockSecureData {
+protocol SecureDataProtocol {
+    func setToken(token: String)
+    func getToken() -> String?
+    func deleteToken()
+}
+
+final class MockSecureData: SecureDataProtocol {
     
     var token: String?
     

@@ -8,9 +8,6 @@
 import Foundation
 
 final class LoginViewModel{
-
-    //MARK: - StateVariable
-    var isSuccess: Bool = false
     
     //MARK: - Extern models
     private let apiProvider = ApiProvider()
@@ -22,27 +19,23 @@ final class LoginViewModel{
     }
 
     //MARK: - Metodo Login
-    func onLoginButton(email: String?, password: String?) -> Bool {
+    func onLoginButton(email: String?, password: String?, completion: @escaping((Bool) -> Void)) {
         guard let email = email, let password = password, isValid(email,password) else {
             print("Error, email o contraseña no son válidos. ")
-            isSuccess = false
-            return isSuccess
+            completion(false)
+            return
         }
         
-        apiProvider.login(user: email, pass: password) { [weak self] result in
-            
+        apiProvider.login(user: email, pass: password) { result in
             switch result {
             case .success(_):
-                self?.isSuccess = true
-                //self?.navigateVC()
+                completion(true)
                 break
             case .failure(let error):
                 debugPrint("Ha habido un error haciendo la conexión al login \(error)")
-                self?.isSuccess = false
-                
+                completion(false)
             }
         }
-        return isSuccess
     }
      
     

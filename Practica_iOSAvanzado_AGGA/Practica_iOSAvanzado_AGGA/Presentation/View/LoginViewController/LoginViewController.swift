@@ -15,6 +15,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passTextField: UITextField!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var passwordLabel: UILabel!
+    @IBOutlet weak var buttonLogin: UIButton!
     
     //MARK: - Models
     private var viewModel: LoginViewModel
@@ -32,7 +33,11 @@ class LoginViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        resetUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        resetUI()
     }
 
     //MARK: - IBActions
@@ -42,13 +47,13 @@ class LoginViewController: UIViewController {
     
     //MARK: - Methods
     func navigateHeroes() {
-        if !viewModel.onLoginButton(email: emailTextField.text, password: passTextField.text) {
-            usernameLabel.text = "User or password is wrong"
-            passwordLabel.text = "User or password is wrong"
-            usernameLabel.textColor = .red
-            passwordLabel.textColor = .red
-        }else{
-            navigateVC()
+        viewModel.onLoginButton(email: emailTextField.text, password: passTextField.text) { [weak self] isSuccess in
+            switch isSuccess {
+            case true:
+                self?.navigateVC()
+            case false:
+                self?.updateUIError()
+            }
         }
     }
     
@@ -60,13 +65,23 @@ class LoginViewController: UIViewController {
         }
     }
     
-    func updateUI(){
-     
+    func updateUIError(){
         DispatchQueue.main.async {
-            
+            self.usernameLabel.text = "User or password is wrong"
+            self.passwordLabel.text = "User or password is wrong"
+            self.usernameLabel.textColor = .red
+            self.passwordLabel.textColor = .red
         }
-        
-        
+    }
+    
+    func resetUI(){
+        DispatchQueue.main.async {
+            self.buttonLogin.tintColor = .yellow
+            self.usernameLabel.text = ""
+            self.passwordLabel.text = ""
+            self.usernameLabel.textColor = .yellow
+            self.passwordLabel.textColor = .yellow
+        }
     }
     
 }

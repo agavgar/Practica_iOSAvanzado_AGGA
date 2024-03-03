@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController" customModule="Practica_IOSAvanzado_AGGA" customModuleProvider="target">
             <connections>
+                <outlet property="buttonLogin" destination="Qlt-MV-M3p" id="f0Z-QK-07a"/>
                 <outlet property="emailTextField" destination="OXv-qb-OcN" id="Fv2-nA-drv"/>
                 <outlet property="passTextField" destination="UHS-bq-Dyl" id="5n1-hK-qWM"/>
                 <outlet property="passwordLabel" destination="fNE-QM-LRa" id="hyT-qF-8P3"/>

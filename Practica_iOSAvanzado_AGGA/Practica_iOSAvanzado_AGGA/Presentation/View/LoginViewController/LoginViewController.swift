@@ -34,6 +34,9 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         resetUI()
+        
+        self.hideKeyboard()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,5 +86,18 @@ class LoginViewController: UIViewController {
             self.passwordLabel.textColor = .yellow
         }
     }
+    
+    func hideKeyboard(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.hideKeyboardOBJC))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    @objc func hideKeyboardOBJC(){
+        view.endEditing(true)
+    }
+    
+    
+    
     
 }

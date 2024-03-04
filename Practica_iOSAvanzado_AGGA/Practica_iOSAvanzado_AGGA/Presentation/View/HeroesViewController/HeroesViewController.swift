@@ -39,6 +39,7 @@ class HeroesViewController: UIViewController {
         viewModel.loadHeroes()
         collectionView.reloadData()
         
+        self.hideKeyboard()
         
     }
     
@@ -110,6 +111,16 @@ extension HeroesViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let nextVM = DetailViewModel(heroe: heroe)
         let nextVC = DetailViewController(viewModel:nextVM)
         self.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func hideKeyboard(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.hideKeyboardOBJC))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    @objc func hideKeyboardOBJC(){
+        view.endEditing(true)
     }
     
 }

@@ -12,7 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DetailViewController" customModule="Practica_IOSAvanzado_AGGA" customModuleProvider="target">
             <connections>
                 <outlet property="collectionView" destination="dSp-YJ-330" id="kE8-DY-YpQ"/>
-                <outlet property="heroDescription" destination="zu6-Hk-fsZ" id="KDR-PF-TGO"/>
+                <outlet property="heroDescription" destination="rwp-3k-dy4" id="Alo-UY-dMd"/>
                 <outlet property="heroImage" destination="Un3-Ic-JXX" id="5kj-Rt-qR5"/>
                 <outlet property="heroName" destination="OSD-ZK-eWK" id="48c-P0-XDx"/>
                 <outlet property="mapView" destination="nPa-Vp-byz" id="2mO-KX-f4V"/>
@@ -63,13 +63,14 @@
                             <color key="textColor" red="0.81373292210000003" green="0.5263592601" blue="0.23119997980000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="40" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zu6-Hk-fsZ" userLabel="Description">
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rwp-3k-dy4" userLabel="Description">
                             <rect key="frame" x="0.0" y="109" width="353" height="95"/>
-                            <string key="text">ashjkldhasdjkashdjkashjkdhasjkdhasjkhdjkashdkjahsdkjhaskjdhaskjdhkasjhdjkahsdjkashdjkashdkjashdjkhaskjdhaskjdasndlaskmdnlasndlansm,nd,mnasm,dnas,mdnm,asmndm,asnd,masndm,nasdm,nas,mdnasm,nd,masnd,mnas,dmnas,mdna,snd</string>
-                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="Map" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qU8-Mc-cUb">
                             <rect key="frame" x="0.0" y="204" width="38.333333333333336" height="25"/>
                             <constraints>
@@ -81,7 +82,7 @@
                         </label>
                     </subviews>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="zu6-Hk-fsZ" secondAttribute="trailing" constant="8" id="XRN-4D-V9P"/>
+                        <constraint firstAttribute="trailing" secondItem="rwp-3k-dy4" secondAttribute="trailing" constant="8" id="eUP-JF-9fr"/>
                     </constraints>
                 </stackView>
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="nPa-Vp-byz">
@@ -134,7 +135,7 @@
         </view>
     </objects>
     <resources>
-        <image name="BG" width="390" height="844"/>
+        <image name="BG" width="968" height="1672"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

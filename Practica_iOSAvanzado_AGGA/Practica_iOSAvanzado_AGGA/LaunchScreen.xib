@@ -14,7 +14,7 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BG" translatesAutoresizingMaskIntoConstraints="NO" id="HK3-qo-fjz">
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BG" highlightedImage="BG" translatesAutoresizingMaskIntoConstraints="NO" id="HK3-qo-fjz">
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                 </imageView>
             </subviews>
@@ -30,7 +30,7 @@
         </view>
     </objects>
     <resources>
-        <image name="BG" width="720" height="1280"/>
+        <image name="BG" width="968" height="1672"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

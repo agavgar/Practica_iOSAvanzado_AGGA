@@ -1,8 +1,8 @@
-**WIP: Práctica para el módulo iOS Avanzado de Keepcoding.**
+**Práctica para el módulo iOS Avanzado de Keepcoding.**
 
 En esta práctica desarrollo una app con lenguaje swift y con CoreData bajo el patrón de diseño MVVM (Model - View - ViewModel). Para su elaboración se consumido la API de Dragon Ball para realizar llamadas de red. Guardamos el token en Keychain para mayor seguridad y guardamos todos los datos en una base de datos de CoreData. También he trabajado con MapKit para añadir las localizaciones y el SearchBar de Apple con filtros para conseguir la aplicación.
 
-**Resultado: WIP**
+**Resultado: APTO**
 
 ![Simulator Screenshot - iPhone 15 - 2024-02-27 at 13 47](https://github.com/agavgar/Practica_iOSAvanzado_AGGA/assets/98350985/c72a49e9-fe09-45ce-97c2-006566678d03)
 ![Simulator Screenshot - iPhone 15 - 2024-02-27 at 13 47-3](https://github.com/agavgar/Practica_iOSAvanzado_AGGA/assets/98350985/13cd511f-bbb6-4854-a53d-0d6661597bca)
